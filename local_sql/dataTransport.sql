@@ -40,16 +40,12 @@ CREATE PROCEDURE `merge_discrete_app_date`()
 				IF no_more_record=1 THEN
 					LEAVE loop_label;
 				END IF;
-				-- 信息插入之日表中
+				-- 记录计数器
 				SET count=count+1;
 
 				IF appointmentid_above = appointmentid_cur THEN
 
 					IF 1 = DATEDIFF(checkout_time_cur, checkout_time_above) THEN
-						-- insert into yangmu_debug_log()checkout_time_cur, checkout_time_above, DATEDIFF(checkout_time_cur, checkout_time_above);
-						-- 获取tmp临时表指定数据
-						-- SELECT appointmentid INTO appointmentid_tmp FROM appointmenttime_tmp 
-						-- WHERE id=id_group_first AND appointmentid=appointmentid_cur;
 
 						SET checkout_time_above=checkout_time_cur;
 						
