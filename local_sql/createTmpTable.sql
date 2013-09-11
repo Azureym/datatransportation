@@ -36,7 +36,7 @@ CREATE TABLE `hotel_apt_tmp` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 删除之前插入遗留的记录
--- DELETE FROM `appointmentlog` WHERE id >= 9000;
+ DELETE FROM `appointmentlog` WHERE id >= 15000;
 
 /*
 -- 预约日志临时表，该表将多个appointmentid所对应的记录经过赋值之后插入表的末尾
