@@ -1,6 +1,6 @@
 DELIMITER //
 
--- 将appointmenttime中的离散日期进行合并并存储至appointmenttime_tmp临时表中
+-- 将appointmenttime中的离散日期进行合并并存储至appointmenttime_tmp临时表中,该procedure不修改appointmenttime表中的数据,procedure仅涉及appointmenttime表
 DROP PROCEDURE IF EXISTS `merge_discrete_app_date`//
 
 CREATE PROCEDURE `merge_discrete_app_date`()
@@ -137,6 +137,8 @@ END //
 
 DROP PROCEDURE IF EXISTS `remove_hotelaptid_duplication` //
 
+-- 该存储过程通过appointmentid 连接hotelappointment 和 appointmenttime_tmp两个表，appointmentid没有重复的数据原样插入到`hotel_apt_tmp`表中；如果出现重复appoitmentid的数据，首条数据原样插入`hotel_apt_tmp`表中，重复的数据将被插入到id从12000开始的记录中, 该存储过程同时更新appointmentlog表，如果连表之后出现重复的appointmentid,则`appointmentlog`表中也应该对应两条以上的记录，这里将原有appointmentid所对应的记录复制以后，修改其中的appointmentid字段为新的appointmentid，然后插入到id为15000以后的记录中
+
 CREATE PROCEDURE `remove_hotelaptid_duplication`(OUT duplicated_aptid_apt_out INT, OUT duplicated_aptid_log_out INT)
 BEGIN
 	-- 游标结尾标记值
@@ -145,8 +147,8 @@ BEGIN
 	DECLARE appointmentid_above INT DEFAULT 0;
 	
 	-- 当appointmentid重复时将其插入hotel_apt_tmp与hotelappointmentlog_tmp表的末尾起始位置
-	DECLARE duplicated_aptid_apt INT DEFAULT 10000;
-	DECLARE duplicated_aptid_log INT DEFAULT 9000;
+	DECLARE duplicated_aptid_apt INT DEFAULT 12000;
+	DECLARE duplicated_aptid_log INT DEFAULT 15000;
 
 	-- hotel_apt_tmp游标映射字段
 	DECLARE id_cur INT;
